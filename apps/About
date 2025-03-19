@@ -1,0 +1,59 @@
+/\*
+
+Bekzod aka savollari:
+
+1. NestJS nima? Qanaqa ingridientlar bor? (7ta) Asosiy ingridient?
+   NestJS - Back-end framework express or fastify .
+   Asosiy mantiq modullarni ustiga qurilgan va 7 ingridientlar bor :
+   1.Module
+   2.Controller
+   3.Resolverlar
+   4.Service
+   5.Pipes
+   6.Interceptors
+   7.Guards
+
+2. Modular property types? (4ta)
+   1.Imports-External va custom packeglarni import qilib ishlatamiz
+   2.Exports-Biz yozgan mantiq ya'niy servicelarni export qilamiz boshqa modulelarga
+   3.Controllers-HTTP-requestlarni ishatmiz
+   4.Providers-Resolver va Servicelarni
+
+3. NestJS da qanaqa falsafa va patternlar ishlatiladi?
+   Falsafa: OOP(AOP),Functional Programming va Functional Reactive Programming.
+   Patterns:DI,Decoratorlar Middlewearlar
+
+4. Qayerda "nestar-api" ishga tushirishdi berganmi?
+   Nest-cli.json
+
+5. src/main.ts da app nima? nega main.ts Global Integration maydoni?
+   Global Integration maydoni-Chunki global middlewearlar integratsiya qilingan.
+
+6. dto validation 3ta darajasi?
+   Global > Resolver or Controller > Method
+
+7. validation 4 types?
+   1.Front-end
+   2.Pipe
+   3.Back-end
+   4.Schema yaniy DataBase validation
+
+8. app.module nima?
+9. imports, exports, controllers, providers farqi nimada? propertys of nestjs
+10. member.module nima?
+11. Har bir module ichida MVC bor
+12. Yangi resolver CLI orqali qanaqa create qilish kerak?
+    (nest g resolver components/property --no-spec)
+13. Yangi module ni organize qilish
+
+-
+
+101chi dars:
+
+1. Validation Pipe => Global Integration
+2. GQL formatted error
+3. Logging ishlashi
+4. Validation nimani tekshiradi? string ni number ga ozgartirolidimi?
+5. 1 surprize task takrorlashda
+
+\*/
