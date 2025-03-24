@@ -4,7 +4,7 @@ export const AuthMember = createParamDecorator((data: string, context: Execution
 	let request: any;
 	if (context.contextType === 'graphql') {
 		request = context.getArgByIndex(2).req;
-		if (request.body.authMember) { // request.body.authMember bu ma'lumot aniq buladi chunki auth.guard.ts da uni qo'shganmiz
+		if (request.body.authMember) {
 			request.body.authMember.authorization = request.headers?.authorization;
 		}
 	} else request = context.switchToHttp().getRequest();
