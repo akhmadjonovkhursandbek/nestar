@@ -86,29 +86,29 @@ export class PropertyResolver {
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
 	@Query(() => Properties)
-	public async getAllPropertiesbyAdmin(
+	public async getAllPropertiesByAdmin(
 		@Args('input') input: AllPropertiesInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Properties> {
-		console.log('Query: getAllPropertiesbyAdmin');
-		return await this.propertyService.getAllPropertiesbyAdmin(input);
+		console.log('Query: getAllPropertiesByAdmin');
+		return await this.propertyService.getAllPropertiesByAdmin(input);
 	}
 
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
 	@Mutation(() => Property)
-	public async updatePropertybyAdmin(@Args('input') input: PropertyUpdate): Promise<Property> {
-		console.log('Mutation: updatePropertybyAdmin');
+	public async updatePropertyByAdmin(@Args('input') input: PropertyUpdate): Promise<Property> {
+		console.log('Mutation: updatePropertyByAdmin');
 		input._id = shapeIntoMongoObjectId(input._id);
-		return await this.propertyService.updatePropertybyAdmin(input);
+		return await this.propertyService.updatePropertyByAdmin(input);
 	}
 
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
 	@Mutation(() => Property)
-	public async removePropertybyAdmin(@Args('propertyId') input: string): Promise<Property> {
-		console.log('Mutation: removePropertybyAdmin');
+	public async removePropertyByAdmin(@Args('propertyId') input: string): Promise<Property> {
+		console.log('Mutation: removePropertyByAdmin');
 		const propertyId = shapeIntoMongoObjectId(input);
-		return await this.propertyService.removePropertybyAdmin(propertyId);
+		return await this.propertyService.removePropertyByAdmin(propertyId);
 	}
 }
