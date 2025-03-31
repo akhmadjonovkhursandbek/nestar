@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentResolver } from './comment.resolver';
-import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import CommentSchema from '../../schemas/Comment.model';
 import { AuthModule } from '../auth/auth.module';

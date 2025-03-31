@@ -103,8 +103,8 @@ export class CommentService {
 	}
 
 	/** ADMIN */
-	public async removeCommentByAdmin(commentID: ObjectId): Promise<Comment> {
-		const result = await this.commentModel.findByIdAndDelete(commentID);
+	public async removeCommentByAdmin(commentId: ObjectId): Promise<Comment> {
+		const result = await this.commentModel.findByIdAndDelete(commentId);
 		// decrease userComments
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 		return result;

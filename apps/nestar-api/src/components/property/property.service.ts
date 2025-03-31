@@ -20,6 +20,9 @@ import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import moment from 'moment';
 import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { View } from '../../libs/dto/view/view';
+import { LikeService } from '../like/like.service';
+import { LikeInput } from '../../libs/dto/like/like.input';
+import { LikeGroup } from '../../libs/enums/like.enum';
 
 @Injectable()
 export class PropertyService {
@@ -27,6 +30,7 @@ export class PropertyService {
 		@InjectModel('Property') private readonly propertyModel: Model<Property>,
 		private memberService: MemberService,
 		private viewService: ViewService,
+		private likeService: LikeService,
 	) {}
 
 	public async createProperty(input: PropertyInput): Promise<Property> {
@@ -59,7 +63,8 @@ export class PropertyService {
 				targetProperty.propertyViews += 1;
 			}
 
-			// meLiked
+			const likeInput: LikeInput = { memberId: memberId, likeRefId: propertyId, likeGroup: LikeGroup.PROPERTY };
+			targetProperty.meLiked = await this.likeService.checkLikeExistence(likeInput);
 		}
 
 		targetProperty.memberData = await this.memberService.getMember(null, targetProperty.memberId);
@@ -67,10 +72,6 @@ export class PropertyService {
 	}
 
 	public async updateProperty(memberId: ObjectId, input: PropertyUpdate): Promise<Property> {
-		// 1. We didnt update the soldAt and deletedAt fields in the database. We need to update them
-		// 2. MongoDB error: dupplicate key error
-		// 3. "propertyStatus": "SOLD"?  INTERNAL_SERVER_ERROR: "message": "(0 , moment_1.default) is not a function"
-		// moment  considered legacy. Use other alternatives
 		let { propertyStatus, soldAt, deletedAt } = input;
 		console.log('propertyStatus:', propertyStatus);
 		console.log('soldAt:', soldAt);
@@ -81,9 +82,6 @@ export class PropertyService {
 			memberId: memberId,
 			propertyStatus: PropertyStatus.ACTIVE,
 		};
-
-		// if (propertyStatus === PropertyStatus.SOLD) soldAt = moment().toDate();
-		// else if (propertyStatus === PropertyStatus.DELETE) deletedAt = moment().toDate();
 
 		if (propertyStatus === PropertyStatus.SOLD) soldAt = new Date();
 		else if (propertyStatus === PropertyStatus.DELETE) deletedAt = new Date();
@@ -190,6 +188,21 @@ export class PropertyService {
 		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		return result[0];
+	}
+
+	public async likeTargetProperty(memberId: ObjectId, likeRefId: ObjectId): Promise<Property> {
+		const target: Property | null = await this.propertyModel
+			.findOne({ _id: likeRefId, propertyStatus: PropertyStatus.ACTIVE })
+			.exec();
+		if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+		const input: LikeInput = { memberId: memberId, likeRefId: likeRefId, likeGroup: LikeGroup.PROPERTY };
+
+		const modifier = await this.likeService.toggleLike(input);
+		const result = await this.propertyStatsEditor({ _id: likeRefId, targetKey: 'propertyLikes', modifier: modifier });
+		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+
+		return result;
 	}
 
 	/** ADMIN */
